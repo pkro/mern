@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../../middleware/auth');
 const User = require('../../models/user');
+const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ const router = express.Router();
 // @desc    Test route
 // @access  Public
 //router.get('/', (req, res) => res.send('Auth route'));
-// -> ad dmiddleware
+// -> add middleware
 router.get('/', auth, async (req, res) => {
   try {
     // user info comes from the auth middleware where the token is decoded, req.user = decoded.user;
@@ -21,6 +22,35 @@ router.get('/', auth, async (req, res) => {
   res.send('Auth route');
 });
 
-module.exports = router;
+// log in user
+// @route   POST api/auth
+// @desc    Authenticate user & get token
+// @access  Public
+router.post('/', async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWU3MzE2MGFiNjNlNGMxZmVlZmIxM2UwIn0sImlhdCI6MTU4NDYwMDU4NiwiZXhwIjoxNTg0OTYwNTg2fQ.mRPTOZ4wv3uofv416j9zHSRRvQ0LaflVtEiCwC2sOWs
+    // user exists?
+    if (email && password) {
+      let user = await User.findOne({ email });
+      if (user) {
+        const salt = await bcrypt.genSalt(10);
+        bcrypt.hash(password, salt, async (err, hash) => {
+          if (err) throw err;
+          console.log(user.password + ' ' + hash);
+          const result = await bcrypt.compare(user.password, hash);
+          if (result) {
+            return res.status(200).send('User authenticated');
+          } else {
+            return res.status(401).send('unauthorized');
+          }
+        });
+      }
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error: ' + err.message);
+  }
+});
+
+module.exports = router;
