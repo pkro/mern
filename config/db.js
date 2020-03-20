@@ -8,6 +8,7 @@ const connectDB = async () => {
     await mongoose.connect(db, {
       useUnifiedTopology: true, // these 2 options because of deprecation warning
       useNewUrlParser: true,
+      useFindAndModify: false,
     });
     console.log('MongoDB connected');
   } catch (err) {
