@@ -74,6 +74,9 @@ const ProfileSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
       },
+      description: {
+        type: String,
+      },
     },
   ],
   social: {

@@ -272,7 +272,15 @@ router.put(
       return res.status(400).json(errors.array());
     }
 
-    const { school, degree, fieldofstudy, from, to, current } = req.body;
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
 
     const newEdu = {
       school,
@@ -281,6 +289,7 @@ router.put(
       from,
       to,
       current,
+      description,
     };
 
     try {
