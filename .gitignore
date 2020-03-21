@@ -1,3 +1,4 @@
+config/default.json
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
 
 # Created by https://www.gitignore.io/api/visualstudiocode,linux,node
@@ -5,7 +6,7 @@
 
 ### Linux ###
 *~
-default.json
+
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
