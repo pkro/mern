@@ -9,7 +9,7 @@ const router = express.Router();
 
 // @route   POST api/posts
 // @desc    Create a post
-// @access  Public
+// @access  Private
 router.post(
   '/',
   [
@@ -48,8 +48,8 @@ router.post(
 
 // @route   GET api/posts/:id
 // @desc    Get post
-// @access  Public
-router.get('/:id', async (req, res) => {
+// @access  Private
+router.get('/:id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate('user', [
       'name',
@@ -67,8 +67,8 @@ router.get('/:id', async (req, res) => {
 
 // @route   GET api/posts
 // @desc    Get all posts
-// @access  Public
-router.get('/', async (req, res) => {
+// @access  Private
+router.get('/', auth, async (req, res) => {
   try {
     const posts = await Post.find({}).populate('user', ['name', 'avatar']);
     return res.status(200).json(posts);
@@ -80,8 +80,8 @@ router.get('/', async (req, res) => {
 
 // @route   DELETE api/posts
 // @desc    Delete a post
-// @access  Public (?), should probably be private and only deletable by user
-router.delete('/:id', async (req, res) => {
+// @access  Private
+router.delete('/:id', auth, async (req, res) => {
   try {
     await Post.findByIdAndDelete(req.params.id);
     return res.status(200).json({ msg: 'post deleted' });
