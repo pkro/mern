@@ -70,7 +70,9 @@ router.get('/:id', auth, async (req, res) => {
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const posts = await Post.find({}).populate('user', ['name', 'avatar']);
+    const posts = await Post.find({})
+      .sort({ date: -1 })
+      .populate('user', ['name', 'avatar']);
     return res.status(200).json(posts);
   } catch (err) {
     console.log(err);
