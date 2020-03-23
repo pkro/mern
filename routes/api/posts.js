@@ -55,6 +55,9 @@ router.get('/:id', auth, async (req, res) => {
       'name',
       'avatar',
     ]);
+    if (!post) {
+      return res.status(404).json({ msg: 'post not found' });
+    }
     return res.status(200).json(post);
   } catch (err) {
     if (err.kind === 'ObjectId') {
@@ -80,20 +83,65 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// @route   DELETE api/posts
+// @route   DELETE api/posts/:id
 // @desc    Delete a post
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
   try {
+    const post = await Post.findById(req.params.id);
+    if (post.user.toString() !== req.user.id.toString()) {
+      return res.status(401).json({ msg: 'not authorized to delete post' });
+    }
     await Post.findByIdAndDelete(req.params.id);
     return res.status(200).json({ msg: 'post deleted' });
   } catch (err) {
     if (err.kind === 'ObjectId') {
-      res.json(400).json({ msg: 'post not found' });
+      return res.json(400).json({ msg: 'post not found' });
     }
     console.log(err);
     res.status(500).send('server error');
   }
 });
-// ToDo: get post by id (public), get all posts (public), delete post(private)
+// ToDo: post like / unlike
+
+// @route   PUT api/posts/like/:post_id
+// @desc    add a like
+// @access  Private
+router.put('/like/:id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    // user already liked?
+    if (
+      post.likes.length === 0 ||
+      post.likes.filter(like => like.user.toString() === req.user.id).length ===
+        0
+    ) {
+      post.likes.unshift(req.user.id);
+      await post.save();
+      res.status(200).json(post.likes);
+    } else {
+      res.status(400).json({ msg: 'post already liked' });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('server error');
+  }
+});
+
+// @route   DELETE api/posts/like/:post_id
+// @desc    Delete a like
+// @access  Private
+/* router.delete('/like/:id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    const likes = post.likes.filter(user => user.id.toString() !== req.user.id);
+    post.likes = likes;
+    await post.save();
+    res.status(200).json(post);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('server error');
+  }
+});
+ */
 module.exports = router;
