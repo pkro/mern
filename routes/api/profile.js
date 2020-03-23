@@ -339,9 +339,12 @@ router.get('/github/:username', (req, res) => {
   const githubClientSecret = config.get('githubClientSecret');
   try {
     const options = {
-      uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${githubCLientId}&client_secret=${githubClientSecret}`,
+      uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`,
       method: 'GET',
-      headers: { 'user-agent': 'node.js' },
+      headers: {
+        'user-agent': 'node.js',
+        '-u': `${githubCLientId}:${githubClientSecret}`,
+      },
     };
 
     request(options, (error, response, body) => {
