@@ -128,20 +128,28 @@ router.put('/like/:id', auth, async (req, res) => {
   }
 });
 
-// @route   DELETE api/posts/like/:post_id
+// @route   put api/posts/unlike/:post_id
 // @desc    Delete a like
 // @access  Private
-/* router.delete('/like/:id', auth, async (req, res) => {
+router.put('/unlike/:id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    const likes = post.likes.filter(user => user.id.toString() !== req.user.id);
-    post.likes = likes;
-    await post.save();
-    res.status(200).json(post);
+
+    if (
+      post.likes.filter(like => like.user.toString() === req.user.id).length ===
+      0
+    ) {
+      res.status(400).json({ msg: 'post was not liked to begin with!' });
+    } else {
+      post.likes = post.likes.filter(
+        like => like.user.toString() !== req.user.id
+      );
+      await post.save();
+      res.status(200).json(post.likes);
+    }
   } catch (err) {
     console.log(err);
     res.status(500).send('server error');
   }
 });
- */
 module.exports = router;
