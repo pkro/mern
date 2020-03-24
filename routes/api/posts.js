@@ -154,7 +154,7 @@ router.put('/unlike/:id', auth, async (req, res) => {
 });
 
 // @route   POST api/posts/comment/:post_id
-// @desc    Post a comment
+// @desc    Comment a post omment
 // @access  Private
 router.post(
   '/comment/:post_id',
@@ -183,7 +183,7 @@ router.post(
       };
 
       const post = await Post.findById(req.params.post_id);
-      post.comments.push(newComment);
+      post.comments.unshift(newComment);
       await post.save();
       res.status(200).json(post.comments);
     } catch (err) {
@@ -202,21 +202,21 @@ router.post(
 router.delete('/comment/:post_id/:comment_id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
-    const comments = post.comments.filter(
+    const comment = post.comments.find(
       comment => comment.id.toString() === req.params.comment_id
     );
-    if (comments.length === 1) {
-      if (comments[0].user.toString() === req.user.id) {
-        post.comments = post.comments.filter(
-          comment => comment.id.toString() !== req.params.comment_id
-        );
-        await post.save();
-        return res.status(200).json({ msg: 'comment deleted' });
-      } else {
-        return res.status(403).send('unauthorized');
-      }
+
+    if (!comment) {
+      return res.status(404).json('comment does not exist');
+    }
+    if (comment.user.toString() === req.user.id) {
+      post.comments = post.comments.filter(
+        comment => comment.id.toString() !== req.params.comment_id
+      );
+      await post.save();
+      return res.status(200).json({ msg: 'comment deleted' });
     } else {
-      res.status(404).json('comment does not exist');
+      return res.status(403).send('unauthorized'); // course wrongly sets 401
     }
   } catch (err) {
     console.error(err);
