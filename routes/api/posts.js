@@ -152,4 +152,78 @@ router.put('/unlike/:id', auth, async (req, res) => {
     res.status(500).send('server error');
   }
 });
+
+// @route   POST api/posts/comment/:post_id
+// @desc    Post a comment
+// @access  Private
+router.post(
+  '/comment/:post_id',
+  [
+    auth,
+    [
+      check('text', 'missing comment text')
+        .not()
+        .isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
+
+    try {
+      const user = await User.findById(req.user.id).select('-password');
+
+      const newComment = {
+        text: req.body.text,
+        user: user.id,
+        name: user.name,
+        avatar: user.avatar,
+      };
+
+      const post = await Post.findById(req.params.post_id);
+      post.comments.push(newComment);
+      await post.save();
+      res.status(200).json(post.comments);
+    } catch (err) {
+      if (err.kind === 'ObjectId') {
+        return res.json(400).json({ msg: 'post not found' });
+      }
+      console.error(err);
+      res.status(500).send('server error');
+    }
+  }
+);
+
+// @route   DELETE api/posts/comment/:post_id/:comment_id
+// @desc    Delete a comment
+// @access  Private
+router.delete('/comment/:post_id/:comment_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    const comments = post.comments.filter(
+      comment => comment.id.toString() === req.params.comment_id
+    );
+    if (comments.length === 1) {
+      if (comments[0].user.toString() === req.user.id) {
+        post.comments = post.comments.filter(
+          comment => comment.id.toString() !== req.params.comment_id
+        );
+        await post.save();
+        return res.status(200).json({ msg: 'comment deleted' });
+      } else {
+        return res.status(403).send('unauthorized');
+      }
+    } else {
+      res.status(404).json('comment does not exist');
+    }
+  } catch (err) {
+    console.error(err);
+    if (err.kind === 'ObjectId') {
+      return res.json(400).json({ msg: 'post not found' });
+    }
+    return res.status(500).send('server error');
+  }
+});
 module.exports = router;
