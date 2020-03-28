@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from 'react';
-import axios from 'axios';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -58,7 +57,7 @@ const Register = () => {
             name="password"
             value={password}
             placeholder="Password"
-            minlength="6"
+            minLength="6"
             onChange={onChange}
           />
         </div>
@@ -68,7 +67,7 @@ const Register = () => {
             name="password2"
             value={password2}
             placeholder="Confirm password"
-            minlength="6"
+            minLength="6"
             onChange={onChange}
           />
         </div>
