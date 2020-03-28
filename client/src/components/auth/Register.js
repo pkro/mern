@@ -1,4 +1,6 @@
 import React, { Fragment, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setAlert } from '../../actions/alert';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
@@ -8,6 +10,7 @@ const Register = () => {
     password: '',
     password2: '',
   });
+  const dispatch = useDispatch();
 
   const { name, email, password, password2 } = formData; // destructured just so we don't have to use formData.name etc.
 
@@ -19,7 +22,7 @@ const Register = () => {
     if (password === password2) {
       console.log('success');
     } else {
-      console.log('passwords do not match');
+      dispatch(setAlert('Passwords do not match', 'danger'));
     }
   };
   return (
@@ -81,4 +84,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Register; // lets us use props.setAlert
