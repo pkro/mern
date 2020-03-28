@@ -14,26 +14,10 @@ const Register = () => {
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value }); // [] so we can use it as key: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#Computed_property_names
 
-  const onSubmit = async e => {
+  const onSubmit = e => {
     e.preventDefault();
     if (password === password2) {
-      const newUser = {
-        name,
-        email,
-        password,
-      };
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-
-        const body = JSON.stringify(newUser);
-        const res = await axios.post('/api/users', newUser, config); // just /api/users because we added a proxy in package.json
-      } catch (err) {
-        console.error(err);
-      }
+      console.log('success');
     } else {
       console.log('passwords do not match');
     }
