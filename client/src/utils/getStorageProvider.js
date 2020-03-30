@@ -1,4 +1,4 @@
-const getStorageProvider = (storePermanently = false) => {
+const getStorageProvider = (storePermanently = true) => {
   if (storePermanently) {
     return window.localStorage;
   } else {
