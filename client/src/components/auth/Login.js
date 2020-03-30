@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
 import { Link } from 'react-router-dom';
@@ -16,7 +17,7 @@ const Login = ({ login }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-    login({ email, password });
+    login(email, password);
   };
 
   return (
@@ -55,4 +56,7 @@ const Login = ({ login }) => {
   );
 };
 
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+};
 export default connect(null, { login })(Login);
