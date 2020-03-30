@@ -8,7 +8,7 @@ const { check, validationResult } = require('express-validator');
 const router = express.Router();
 
 // @route   GET api/auth
-// @desc    Test route
+// @desc    Get user by token
 // @access  Public
 //router.get('/', (req, res) => res.send('Auth route'));
 // -> add middleware
@@ -21,7 +21,6 @@ router.get('/', auth, async (req, res) => {
     console.error(err.message);
     res.status(500).json({ msg: 'Server error' });
   }
-  res.send('Auth route');
 });
 
 // log in user

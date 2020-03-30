@@ -2,17 +2,29 @@ import React, { Fragment } from 'react'; // Fragment doesn''t show up in DOM, ju
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import { useEffect } from 'react';
 import './App.css';
 
 import Landing from './components/layout/Landing';
 import Navbar from './components/layout/Navbar';
 import Alert from './components/layout/Alert';
 
+import setAuthToken from './utils/setAuthToken';
 // redux
-import { Provider } from 'react-redux';
 import store from './store';
+import { Provider } from 'react-redux';
+import { loadUser } from './actions/auth';
+
+if (localStorage.token) {
+  // same as localStorage.getItem('token')
+  setAuthToken(localStorage.token);
+}
 
 const App = () => {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []); //[] = run only once
+
   return (
     <Provider store={store}>
       <Router>
