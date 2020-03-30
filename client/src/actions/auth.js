@@ -8,10 +8,14 @@ import {
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
+import getStorageProvider from '../utils/getStorageProvider';
+
+const storage = getStorageProvider();
+
 // Load / authenticate user
 export const loadUser = () => async dispatch => {
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
+  if (storage.token) {
+    setAuthToken(storage.token);
   }
 
   try {
@@ -34,14 +38,14 @@ export const register = ({ name, email, password }) => async dispatch => {
 
   try {
     const res = await axios.post('/api/users', body, config);
-    localStorage.setItem('token', res.data.token);
+    storage.setItem('token', res.data.token);
     dispatch({ type: REGISTER_SUCCESS, payload: res.data });
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger', 3000)));
     }
-    localStorage.removeItem('token');
+    storage.removeItem('token');
     dispatch({ type: REGISTER_FAIL });
   }
 };

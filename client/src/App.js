@@ -14,10 +14,13 @@ import setAuthToken from './utils/setAuthToken';
 import store from './store';
 import { Provider } from 'react-redux';
 import { loadUser } from './actions/auth';
+import getStorageProvider from './utils/getStorageProvider';
 
-if (localStorage.token) {
+const storage = getStorageProvider();
+
+if (storage.token) {
   // same as localStorage.getItem('token')
-  setAuthToken(localStorage.token);
+  setAuthToken(storage.token);
 }
 
 const App = () => {
