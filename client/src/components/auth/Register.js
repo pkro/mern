@@ -1,16 +1,18 @@
 import React, { Fragment, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const Register = () => {
+const Register = ({ setAlert, register }) => {
+  // destructured props so we can use setAlert instead of props.setAlert (if we used (props) => ...)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     password2: '',
   });
-  const dispatch = useDispatch();
 
   const { name, email, password, password2 } = formData; // destructured just so we don't have to use formData.name etc.
 
@@ -20,9 +22,9 @@ const Register = () => {
   const onSubmit = e => {
     e.preventDefault();
     if (password === password2) {
-      console.log('success');
+      register({ name, email, password });
     } else {
-      dispatch(setAlert('Passwords do not match', 'danger'));
+      setAlert('Passwords do not match', 'danger', 3000);
     }
   };
   return (
@@ -84,4 +86,10 @@ const Register = () => {
   );
 };
 
-export default Register; // lets us use props.setAlert
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+};
+
+export default connect(null, { setAlert, register })(Register);
+// export default connect(STATE, { ACTION(s) })(COMPONENT);
