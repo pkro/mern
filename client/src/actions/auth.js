@@ -22,7 +22,6 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get('/api/auth');
-    console.log(axios.defaults.headers.common['x-auth-token']);
     dispatch({ type: USER_LOADED, payload: res.data });
     console.log('success');
   } catch (err) {
@@ -44,6 +43,7 @@ export const register = ({ name, email, password }) => async dispatch => {
     const res = await axios.post('/api/users', body, config);
     storage.setItem('token', res.data.token);
     dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+    dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -68,6 +68,7 @@ export const login = (email, password) => async dispatch => {
     const res = await axios.post('/api/auth', body, config);
     storage.setItem('token', res.data.token);
     dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+    dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
