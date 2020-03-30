@@ -18,30 +18,6 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case REGISTER_SUCCESS:
-      return {
-        ...state,
-        ...payload,
-        token: payload.token,
-        isAuthenticated: true,
-        loading: false,
-      };
-    case REGISTER_FAIL:
-      return { ...state, token: null, isAuthenticated: false, loading: false };
-    case USER_LOADED:
-      return {
-        ...state,
-        isAuthenticated: true,
-        loading: false,
-        user: payload,
-      };
-    case AUTH_ERROR:
-      return {
-        ...state,
-        token: null,
-        isAuthenticated: false,
-        loading: false,
-        user: null,
-      };
     case LOGIN_SUCCESS:
       return {
         ...state,
@@ -50,8 +26,23 @@ export default function(state = initialState, action) {
         isAuthenticated: true,
         loading: false,
       };
+    case REGISTER_FAIL:
     case LOGIN_FAIL:
-      return { ...state, token: null, isAuthenticated: false, loading: false };
+    case AUTH_ERROR:
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        user: null,
+      };
+    case USER_LOADED:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: payload,
+      };
 
     default:
       return state;
