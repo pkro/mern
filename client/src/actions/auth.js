@@ -7,6 +7,7 @@ import {
   AUTH_ERROR,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
+  LOGOUT,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -23,7 +24,6 @@ export const loadUser = () => async dispatch => {
   try {
     const res = await axios.get('/api/auth');
     dispatch({ type: USER_LOADED, payload: res.data });
-    console.log('success');
   } catch (err) {
     dispatch({ type: AUTH_ERROR });
   }
@@ -77,4 +77,9 @@ export const login = (email, password) => async dispatch => {
     storage.removeItem('token');
     dispatch({ type: LOGIN_FAIL });
   }
+};
+
+export const logout = () => async dispatch => {
+  storage.removeItem('token');
+  dispatch({ type: LOGOUT });
 };
