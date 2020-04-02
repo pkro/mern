@@ -7,7 +7,7 @@ const Dashboard = ({ getCurrentProfile, auth, profile }) => {
   useEffect(() => {
     getCurrentProfile();
   }, []);
-  console.log(profile);
+
   return (
     <div>
       <h1>Dashboard</h1>
