@@ -17,6 +17,8 @@ import { Provider } from 'react-redux';
 import { loadUser } from './actions/auth';
 import getStorageProvider from './utils/getStorageProvider';
 import PrivateRoute from './components/routing/PrivateRoute';
+import CreateProfile from './components/dashboard/CreateProfile';
+
 const storage = getStorageProvider();
 
 if (storage.token) {
@@ -41,6 +43,11 @@ const App = () => {
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute
+                exact
+                path="/create-profile"
+                component={CreateProfile}
+              />
             </Switch>
           </section>
         </Fragment>
