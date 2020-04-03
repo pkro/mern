@@ -34,7 +34,7 @@ export const createProfile = (
   try {
     const res = await axios.post('/api/profile', formData, config);
     dispatch({ type: GET_PROFILE, payload: res.data }); // as it returns the profile
-    dispatch(setAlert(edit ? 'Profile updated' : 'Profile created'));
+    dispatch(setAlert(edit ? 'Profile updated' : 'Profile created', 'success'));
     if (!edit) {
       // we can't use Redirect from react router in an action
       history.push('/dashboard');
