@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { SET_ALERT, REMOVE_ALERT } from './types';
 
+// TODO: either scroll to top so user can see alert if scrolled down or position alert float on top of screen in css
 export const setAlert = (msg, alertType, msToTimeout) => dispatch => {
   const id = uuidv4();
   dispatch({
