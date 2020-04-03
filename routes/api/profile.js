@@ -6,6 +6,7 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const config = require('config');
 const request = require('request');
+const normalize = require('normalize-url');
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -65,27 +66,25 @@ router.post(
       linkedin,
     } = req.body;
 
-    const profileFields = {};
-    profileFields.user = req.user.id;
-    profileFields.social = {};
+    const profileFields = {
+      user: req.user.id,
+      company,
+      location,
+      website: website === '' ? '' : normalize(website, { forceHttps: true }),
+      bio,
+      skills: Array.isArray(skills)
+        ? skills
+        : skills.split(',').map(skill => skill.trim()),
+      status,
+      githubusername,
+    };
 
-    if (company) profileFields.company = company;
-    if (website) profileFields.website = website;
-    if (location) profileFields.location = location;
-    if (bio) profileFields.bio = bio;
-    if (status) profileFields.status = status;
-    if (githubusername) profileFields.githubusername = githubusername;
-
-    if (youtube) profileFields.social.youtube = youtube;
-    if (facebook) profileFields.social.facebook = facebook;
-    if (twitter) profileFields.social.twitter = twitter;
-    if (instagram) profileFields.social.instagram = instagram;
-    if (xing) profileFields.social.xing = xing;
-    if (linkedin) profileFields.social.linkedin = linkedin;
-
-    if (skills) {
-      profileFields.skills = skills.split(',').map(item => item.trim());
+    socialFields = { youtube, twitter, instagram, xing, linkedin, facebook };
+    for (const [key, value] of Object.entries(socialFields)) {
+      socialFields[key] =
+        value.length > 0 ? normalize(value, { forceHttps: true }) : '';
     }
+    profileFields.social = socialFields;
 
     try {
       let profile = await Profile.findOne({
