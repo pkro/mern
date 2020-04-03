@@ -17,7 +17,7 @@ import { Provider } from 'react-redux';
 import { loadUser } from './actions/auth';
 import getStorageProvider from './utils/getStorageProvider';
 import PrivateRoute from './components/routing/PrivateRoute';
-import CreateProfile from './components/dashboard/CreateProfile';
+import CreateProfile from './components/profile-forms/CreateProfile';
 
 const storage = getStorageProvider();
 
