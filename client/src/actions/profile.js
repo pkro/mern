@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-
-import { GET_PROFILE, PROFILE_ERROR, CREATE_PROFILE } from '../actions/types';
+import { GET_PROFILE, PROFILE_ERROR } from '../actions/types';
+import Alert from '../components/layout/Alert';
 
 // get current users profile
 export const getCurrentProfile = () => async dispatch => {
@@ -20,21 +20,11 @@ export const getCurrentProfile = () => async dispatch => {
 };
 
 // create / update current users profile
-export const createProfile = ({
-  company,
-  website,
-  location,
-  status,
-  skills,
-  githubusername,
-  bio,
-  twitter,
-  facebook,
-  xing,
-  linkedin,
-  youtube,
-  instagram,
-}) => async dispatch => {
+export const createProfile = (
+  formData,
+  history,
+  edit = false
+) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -42,29 +32,22 @@ export const createProfile = ({
   };
 
   try {
-    const body = {
-      company,
-      website,
-      location,
-      status,
-      skills,
-      githubusername,
-      bio,
-      twitter,
-      facebook,
-      xing,
-      linkedin,
-      youtube,
-      instagram,
-    };
-
-    const res = await axios.post('api/profile', body, config);
-    dispatch({ type: CREATE_PROFILE, payload: body });
-    console.log(res);
+    const res = await axios.post('/api/profile', formData, config);
+    dispatch({ type: GET_PROFILE, payload: res.data }); // as it returns the profile
+    dispatch(setAlert(edit ? 'Profile updated' : 'Profile created'));
+    if (!edit) {
+      // we can't use Redirect from react router in an action
+      history.push('/dashboard');
+    }
   } catch (err) {
     const errors = err.response.data.errors;
+    console.log(err);
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger', 3000)));
+      dispatch({
+        type: PROFILE_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status },
+      });
     }
   }
 };
