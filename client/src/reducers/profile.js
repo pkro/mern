@@ -35,12 +35,7 @@ export default function(state = initialState, action) {
         repos: [],
         loading: false,
       };
-    case CREATE_PROFILE:
-      return {
-        ...state,
-        profile: { ...payload },
-        loading: false,
-      };
+
     default:
       return state;
   }
