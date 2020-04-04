@@ -1,10 +1,12 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createProfile } from '../../actions/profile';
+import { editProfile, getCurrentProfile } from '../../actions/profile';
 
-const CreateProfile = ({ createProfile, history }) => {
+// TODO: display different button and other texts if profile already exists
+// dont forget to add last parameter true to editProfile in case of edit
+const EditProfile = ({ profile, editProfile, history, getCurrentProfile }) => {
   const [formData, setFormData] = useState({
     company: '',
     website: '',
@@ -39,13 +41,30 @@ const CreateProfile = ({ createProfile, history }) => {
     instagram,
   } = formData;
 
-  const onChange = e => {
+  useEffect(() => {
+    getCurrentProfile();
+  }, [getCurrentProfile]);
+
+  useEffect(() => {
+    if (profile.profile && !profile.loading) {
+      const profileData = { ...formData };
+      for (const key in profile.profile) {
+        if (key in profileData) profileData[key] = profile.profile[key];
+      }
+      for (const key in profile.profile.social) {
+        if (key in profileData) profileData[key] = profile.profile.social[key];
+      }
+      setFormData(profileData);
+    }
+  }, [profile]);
+
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    createProfile(formData, history, false);
+    editProfile(formData, history, profile.profile);
   };
 
   return (
@@ -221,17 +240,25 @@ const CreateProfile = ({ createProfile, history }) => {
 
         <input type="submit" className="btn btn-primary my-1" />
 
-        <a href="dashboard.html" className="btn btn-ligh my-1">
+        <Link to="/dashboard" className="btn btn-ligh my-1">
           Go back
-        </a>
+        </Link>
       </form>
     </Fragment>
   );
 };
 
-CreateProfile.propTypes = {
-  createProfile: PropTypes.func.isRequired,
+EditProfile.propTypes = {
+  editProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object,
 };
 
+const mapStateToProps = (state) => ({
+  profile: state.profile,
+});
+
 // withRouter so we have history object in props
-export default connect(null, { createProfile })(withRouter(CreateProfile));
+export default connect(mapStateToProps, { editProfile, getCurrentProfile })(
+  withRouter(EditProfile)
+);

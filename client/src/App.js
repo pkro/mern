@@ -17,7 +17,7 @@ import { Provider } from 'react-redux';
 import { loadUser } from './actions/auth';
 import getStorageProvider from './utils/getStorageProvider';
 import PrivateRoute from './components/routing/PrivateRoute';
-import CreateProfile from './components/profile-forms/CreateProfile';
+import EditProfile from './components/profile-forms/EditProfile';
 
 const storage = getStorageProvider();
 
@@ -45,8 +45,8 @@ const App = () => {
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute
                 exact
-                path="/create-profile"
-                component={CreateProfile}
+                path="/edit-profile"
+                component={EditProfile}
               />
             </Switch>
           </section>

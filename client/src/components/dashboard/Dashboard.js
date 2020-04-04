@@ -4,6 +4,7 @@ import { getCurrentProfile } from '../../actions/profile';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
+import DashboardActions from './DashboardActions';
 
 const Dashboard = ({
   getCurrentProfile,
@@ -24,12 +25,13 @@ const Dashboard = ({
       <p className="lead">
         <i className="fas fa-user"></i>Welcome, {user && user.name}
       </p>
+
       {profile !== null ? (
-        <Fragment>has</Fragment>
+        <DashboardActions />
       ) : (
         <Fragment>
           <p>You haven't set up a profile yet</p>
-          <Link to="/create-profile" className="btn btn-primary my-1">
+          <Link to="/edit-profile" className="btn btn-primary my-1">
             Create profile
           </Link>
         </Fragment>
@@ -43,7 +45,7 @@ Dashboard.propTypes = {
   profile: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.auth,
   profile: state.profile,
 });

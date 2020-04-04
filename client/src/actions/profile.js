@@ -4,7 +4,7 @@ import { GET_PROFILE, PROFILE_ERROR } from '../actions/types';
 import Alert from '../components/layout/Alert';
 
 // get current users profile
-export const getCurrentProfile = () => async dispatch => {
+export const getCurrentProfile = () => async (dispatch) => {
   try {
     const res = await axios.get('/api/profile/me');
     dispatch({
@@ -20,11 +20,9 @@ export const getCurrentProfile = () => async dispatch => {
 };
 
 // create / update current users profile
-export const createProfile = (
-  formData,
-  history,
-  edit = false
-) => async dispatch => {
+export const editProfile = (formData, history, edit = false) => async (
+  dispatch
+) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -43,7 +41,7 @@ export const createProfile = (
     const errors = err.response.data.errors;
     console.log(err);
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger', 3000)));
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger', 3000)));
       dispatch({
         type: PROFILE_ERROR,
         payload: { msg: err.response.statusText, status: err.response.status },
