@@ -4,8 +4,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { editProfile, getCurrentProfile } from '../../actions/profile';
 
-// TODO: display different button and other texts if profile already exists
-// dont forget to add last parameter true to editProfile in case of edit
 const EditProfile = ({ profile, editProfile, history, getCurrentProfile }) => {
   const [formData, setFormData] = useState({
     company: '',
