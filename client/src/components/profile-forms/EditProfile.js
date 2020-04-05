@@ -4,22 +4,29 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { editProfile, getCurrentProfile } from '../../actions/profile';
 
-const EditProfile = ({ profile, editProfile, history, getCurrentProfile }) => {
-  const [formData, setFormData] = useState({
-    company: '',
-    website: '',
-    location: '',
-    status: '',
-    skills: '',
-    githubusername: '',
-    bio: '',
-    twitter: '',
-    facebook: '',
-    xing: '',
-    linkedin: '',
-    youtube: '',
-    instagram: '',
-  });
+const initialState = {
+  company: '',
+  website: '',
+  location: '',
+  status: '',
+  skills: '',
+  githubusername: '',
+  bio: '',
+  twitter: '',
+  facebook: '',
+  xing: '',
+  linkedin: '',
+  youtube: '',
+  instagram: '',
+};
+
+const EditProfile = ({
+  profile: { profile, loading },
+  editProfile,
+  history,
+  getCurrentProfile,
+}) => {
+  const [formData, setFormData] = useState(initialState);
 
   const [showSocialNetworks, setShowSocialNetworks] = useState(false);
 
@@ -40,21 +47,18 @@ const EditProfile = ({ profile, editProfile, history, getCurrentProfile }) => {
   } = formData;
 
   useEffect(() => {
-    getCurrentProfile();
-  }, [getCurrentProfile]);
-
-  useEffect(() => {
-    if (profile.profile && !profile.loading) {
-      const profileData = { ...formData };
-      for (const key in profile.profile) {
-        if (key in profileData) profileData[key] = profile.profile[key];
+    if (!profile) getCurrentProfile();
+    if (!loading && profile) {
+      const profileData = { ...initialState };
+      for (const key in profile) {
+        if (key in profileData) profileData[key] = profile[key];
       }
-      for (const key in profile.profile.social) {
-        if (key in profileData) profileData[key] = profile.profile.social[key];
+      for (const key in profile.social) {
+        if (key in profileData) profileData[key] = profile.social[key];
       }
       setFormData(profileData);
     }
-  }, [profile]);
+  }, [loading, getCurrentProfile, profile]);
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -62,7 +66,7 @@ const EditProfile = ({ profile, editProfile, history, getCurrentProfile }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    editProfile(formData, history, profile.profile);
+    editProfile(formData, history, profile);
   };
 
   return (
