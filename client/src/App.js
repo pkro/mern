@@ -18,6 +18,7 @@ import { loadUser } from './actions/auth';
 import getStorageProvider from './utils/getStorageProvider';
 import PrivateRoute from './components/routing/PrivateRoute';
 import EditProfile from './components/profile-forms/EditProfile';
+import AddExperience from './components/profile-forms/AddExperience';
 
 const storage = getStorageProvider();
 
@@ -47,6 +48,11 @@ const App = () => {
                 exact
                 path="/edit-profile"
                 component={EditProfile}
+              />
+              <PrivateRoute
+                exact
+                path="/add-experience"
+                component={AddExperience}
               />
             </Switch>
           </section>
