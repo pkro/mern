@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import moment from 'moment';
 
-export const Experience = (experience) => {
+export const Experience = ({ experience }) => {
   console.log(experience);
-  const experiences = experience.experience.map((exp) => (
-    <tr key={exp.id}>
+  const experiences = experience.map((exp) => (
+    <tr key={exp._id}>
       <td>{exp.company}</td>
       <td className="hide-sm">{exp.title}</td>
       <td className="hide-sm">
