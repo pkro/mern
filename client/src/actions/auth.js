@@ -9,6 +9,8 @@ import {
   LOGIN_SUCCESS,
   LOGOUT,
   CLEAR_PROFILE,
+  ACCOUNT_DELETED,
+  PROFILE_ERROR,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -17,7 +19,7 @@ import getStorageProvider from '../utils/getStorageProvider';
 const storage = getStorageProvider();
 
 // Load / authenticate user
-export const loadUser = () => async dispatch => {
+export const loadUser = () => async (dispatch) => {
   if (storage.token) {
     setAuthToken(storage.token);
   }
@@ -31,7 +33,7 @@ export const loadUser = () => async dispatch => {
 };
 
 // register user
-export const register = ({ name, email, password }) => async dispatch => {
+export const register = ({ name, email, password }) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -48,7 +50,7 @@ export const register = ({ name, email, password }) => async dispatch => {
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger', 3000)));
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger', 3000)));
     }
     storage.removeItem('token');
     dispatch({ type: REGISTER_FAIL });
@@ -56,7 +58,7 @@ export const register = ({ name, email, password }) => async dispatch => {
 };
 
 // login user
-export const login = (email, password) => async dispatch => {
+export const login = (email, password) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -73,15 +75,35 @@ export const login = (email, password) => async dispatch => {
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger', 3000)));
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger', 3000)));
     }
     storage.removeItem('token');
     dispatch({ type: LOGIN_FAIL });
   }
 };
 
-export const logout = () => async dispatch => {
+export const logout = () => async (dispatch) => {
   storage.removeItem('token');
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
+};
+
+// delete profile
+export const deleteAccount = () => async (dispatch) => {
+  // no parameter as the backend will know the ID from the token in the header
+  if (!window.confirm('Are you sure? Thios can not be undone!')) {
+    return;
+  }
+  try {
+    const res = await axios.delete('/api/profile/');
+    dispatch({ type: CLEAR_PROFILE });
+    dispatch({ type: ACCOUNT_DELETED });
+    dispatch(setAlert('Account deleted'));
+    storage.removeItem('token');
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
 };
