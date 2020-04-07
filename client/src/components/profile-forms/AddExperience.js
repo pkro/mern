@@ -114,7 +114,7 @@ const AddExperience = ({ history, addProfileData }) => {
 };
 
 AddExperience.propTypes = {
-  addExperience: PropTypes.func.isRequired,
+  addProfileData: PropTypes.func.isRequired,
 };
 
 export default connect(null, { addProfileData })(withRouter(AddExperience));
