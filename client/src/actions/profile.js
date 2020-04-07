@@ -33,9 +33,8 @@ export const editProfile = (formData, history, edit = false) => async (
     const res = await axios.post('/api/profile', formData, config);
     dispatch({ type: GET_PROFILE, payload: res.data }); // as it returns the profile
     dispatch(setAlert(edit ? 'Profile updated' : 'Profile created', 'success'));
-      // we can't use Redirect from react router in an action
-      history.push('/dashboard');
-    
+    // we can't use Redirect from react router in an action
+    history.push('/dashboard');
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
