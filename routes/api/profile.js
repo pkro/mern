@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/profile');
+const Post = require('../../models/post');
 const User = require('../../models/user');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
@@ -36,12 +37,8 @@ router.post(
     auth,
     [
       // auth + check middleware
-      check('status', 'Status is a required field')
-        .not()
-        .isEmpty(),
-      check('skills', 'Skills is a required field')
-        .not()
-        .isEmpty(),
+      check('status', 'Status is a required field').not().isEmpty(),
+      check('skills', 'Skills is a required field').not().isEmpty(),
     ],
   ],
   async (req, res) => {
@@ -74,7 +71,7 @@ router.post(
       bio,
       skills: Array.isArray(skills)
         ? skills
-        : skills.split(',').map(skill => skill.trim()),
+        : skills.split(',').map((skill) => skill.trim()),
       status,
       githubusername,
     };
@@ -149,7 +146,10 @@ router.get('/users/:user_id', async (req, res) => {
 // @access  Private
 router.delete('/', auth, async (req, res) => {
   try {
-    // @todo: remove users posts
+    // Optionally remove posts
+    if (config.get('deletePostsOnAccountDelete')) {
+      await Post.deleteMany({ user: req.user.id });
+    }
     // remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
     // remove user
@@ -170,15 +170,9 @@ router.put(
   [
     auth,
     [
-      check('title', 'missing title')
-        .not()
-        .isEmpty(),
-      check('company', 'missing title')
-        .not()
-        .isEmpty(),
-      check('from', 'missing from date')
-        .not()
-        .isEmpty(),
+      check('title', 'missing title').not().isEmpty(),
+      check('company', 'missing title').not().isEmpty(),
+      check('from', 'missing from date').not().isEmpty(),
     ],
   ],
   async (req, res) => {
@@ -233,7 +227,7 @@ router.delete('/experience/:id', auth, async (req, res) => {
     const profile = await Profile.findOne({ user: req.user.id });
     const experienceId = req.params.id;
     const newExperienceList = profile.experience.filter(
-      p => p._id != experienceId
+      (p) => p._id != experienceId
     );
     profile.experience = newExperienceList;
     await profile.save();
@@ -252,18 +246,10 @@ router.put(
   [
     auth,
     [
-      check('school', 'missing school')
-        .not()
-        .isEmpty(),
-      check('degree', 'missing degree')
-        .not()
-        .isEmpty(),
-      check('fieldofstudy', 'missing fieĺdofstudy')
-        .not()
-        .isEmpty(),
-      check('from', 'missing from date')
-        .not()
-        .isEmpty(),
+      check('school', 'missing school').not().isEmpty(),
+      check('degree', 'missing degree').not().isEmpty(),
+      check('fieldofstudy', 'missing fieĺdofstudy').not().isEmpty(),
+      check('from', 'missing from date').not().isEmpty(),
     ],
   ],
   async (req, res) => {
@@ -318,7 +304,7 @@ router.delete('/education/:id', auth, async (req, res) => {
     const profile = await Profile.findOne({ user: req.user.id });
     const educationId = req.params.id;
     const newEducationList = profile.education.filter(
-      p => p._id != educationId
+      (p) => p._id != educationId
     );
     profile.education = newEducationList;
     await profile.save();

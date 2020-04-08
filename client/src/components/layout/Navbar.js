@@ -8,6 +8,9 @@ const Navbar = ({ isAuthenticated, loading, logout }) => {
   const authLinks = (
     <ul>
       <li>
+        <Link to="/profiles">Developers</Link>
+      </li>
+      <li>
         <Link to="/dashboard">
           <i className="fas fa-user"></i>
           <span className="hide-sm">Dashboard</span>
@@ -49,7 +52,7 @@ const Navbar = ({ isAuthenticated, loading, logout }) => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   loading: state.auth.loading,
 });
