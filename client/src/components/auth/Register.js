@@ -16,10 +16,10 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   const { name, email, password, password2 } = formData; // destructured just so we don't have to use formData.name etc.
 
-  const onChange = e =>
+  const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value }); // [] so we can use it as key: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#Computed_property_names
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (password === password2) {
       register({ name, email, password });
@@ -39,6 +39,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         <i className="fas fa-user"></i>
         <p>Create your account</p>
       </div>
+
       <form onSubmit={onSubmit} className="form">
         <div className="form-group">
           <input
@@ -91,7 +92,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
