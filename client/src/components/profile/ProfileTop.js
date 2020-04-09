@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Profile from './Profile';
-import { Link } from 'react-router-dom';
 
 const ProfileTop = ({
   profile: {
@@ -13,7 +11,6 @@ const ProfileTop = ({
     user: { name, avatar },
   },
 }) => {
-  console.log(website);
   return (
     <div className="profile-top bg-primary p-2">
       <img src={avatar} alt="Profile" className="round-img my-1" />
@@ -25,40 +22,40 @@ const ProfileTop = ({
       <p>{location}</p>
       <div className="icons my-1">
         {website && (
-          <Link to={website}>
+          <a rel="noopener noreferrer" target="_blank" href={website}>
             <i className="fas ga-globe fa-2x"></i>
-          </Link>
+          </a>
         )}
         {social.youtube && (
-          <Link to={social.youtube}>
+          <a rel="noopener noreferrer" target="_blank" href={social.youtube}>
             <i className="fab fa-youtube fa-2x"></i>
-          </Link>
+          </a>
         )}
         {social.facebook && (
-          <Link to={social.facebook}>
+          <a rel="noopener noreferrer" target="_blank" href={social.facebook}>
             <i className="fab fa-facebook  fa-2x"></i>
-          </Link>
+          </a>
         )}
-        {social.linkedin && (
-          <Link to={social.linkedin}>
-            <i className="fab fa-linkedin fa-2x"></i>
-          </Link>
+        {social.aedin && (
+          <a rel="noopener noreferrer" target="_blank" href={social.aedin}>
+            <i className="fab fa-aedin fa-2x"></i>
+          </a>
         )}
 
         {social.twitter && (
-          <Link to={social.twitter}>
+          <a rel="noopener noreferrer" target="_blank" href={social.twitter}>
             <i className="fab fa-twitter fa-2x"></i>
-          </Link>
+          </a>
         )}
         {social.xing && (
-          <Link to={social.xing}>
+          <a rel="noopener noreferrer" target="_blank" href={social.xing}>
             <i className="fab fa-xing fa-2x"></i>
-          </Link>
+          </a>
         )}
         {social.instagram && (
-          <Link to={social.instagram}>
+          <a rel="noopener noreferrer" target="_blank" href={social.instagram}>
             <i className="fab fa-instagram fa-2x"></i>
-          </Link>
+          </a>
         )}
       </div>
     </div>
