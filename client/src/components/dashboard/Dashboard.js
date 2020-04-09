@@ -40,7 +40,7 @@ const Dashboard = ({
             className="btn btn-danger my-3"
             onClick={deleteAccount}
           >
-            <i class="fas fa-exclamation-triangle"></i>Delete account
+            <i className="fas fa-exclamation-triangle"></i>Delete account
           </Link>
         </Fragment>
       ) : (
@@ -58,7 +58,7 @@ Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   deleteAccount: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  profile: PropTypes.array.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
