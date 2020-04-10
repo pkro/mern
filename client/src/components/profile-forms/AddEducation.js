@@ -38,13 +38,13 @@ const AddEducation = ({ history, addProfileData }) => {
   return (
     <Fragment>
       <h1 className="large text-primary">Add your education</h1>
-      <p class="lead">
-        <i class="fas fa-book"></i>Add any school, bootcamp, etc. that you have
-        attended
+      <p className="lead">
+        <i className="fas fa-book"></i>Add any school, bootcamp, etc. that you
+        have attended
       </p>
       <small>* = required field</small>
       <form className="form" onSubmit={onSubmit}>
-        <div class="form-group">
+        <div className="form-group">
           <input
             type="text"
             name="school"
@@ -53,7 +53,7 @@ const AddEducation = ({ history, addProfileData }) => {
             onChange={onChange}
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <input
             type="text"
             name="degree"
@@ -62,7 +62,7 @@ const AddEducation = ({ history, addProfileData }) => {
             onChange={onChange}
           />
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <input
             type="text"
             name="fieldofstudy"
