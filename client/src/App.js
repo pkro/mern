@@ -24,13 +24,11 @@ import Profiles from './components/profiles/Profiles';
 import Profile from './components/profile/Profile';
 
 const storage = getStorageProvider();
+setAuthToken(storage.token);
 
 const App = () => {
   useEffect(() => {
-    if (storage.token) {
-      // same as localStorage.getItem('token')
-      setAuthToken(storage.token);
-    }
+    // same as localStorage.getItem('token')
     store.dispatch(loadUser());
   }, []); //[] = run only once
 
