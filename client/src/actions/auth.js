@@ -12,18 +12,12 @@ import {
   ACCOUNT_DELETED,
   PROFILE_ERROR,
 } from './types';
-import setAuthToken from '../utils/setAuthToken';
-
 import getStorageProvider from '../utils/getStorageProvider';
 
 const storage = getStorageProvider();
 
 // Load / authenticate user
 export const loadUser = () => async (dispatch) => {
-  if (storage.token) {
-    setAuthToken(storage.token);
-  }
-
   try {
     const res = await axios.get('/api/auth');
     dispatch({ type: USER_LOADED, payload: res.data });
