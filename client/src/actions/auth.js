@@ -12,9 +12,6 @@ import {
   ACCOUNT_DELETED,
   PROFILE_ERROR,
 } from './types';
-import getStorageProvider from '../utils/getStorageProvider';
-
-const storage = getStorageProvider();
 
 // Load / authenticate user
 export const loadUser = () => async (dispatch) => {
@@ -38,7 +35,6 @@ export const register = ({ name, email, password }) => async (dispatch) => {
 
   try {
     const res = await axios.post('/api/users', body, config);
-    storage.setItem('token', res.data.token);
     dispatch({ type: REGISTER_SUCCESS, payload: res.data });
     dispatch(loadUser());
   } catch (err) {
@@ -46,7 +42,6 @@ export const register = ({ name, email, password }) => async (dispatch) => {
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger', 3000)));
     }
-    storage.removeItem('token');
     dispatch({ type: REGISTER_FAIL });
   }
 };
@@ -63,7 +58,6 @@ export const login = (email, password) => async (dispatch) => {
 
   try {
     const res = await axios.post('/api/auth', body, config);
-    storage.setItem('token', res.data.token);
     dispatch({ type: LOGIN_SUCCESS, payload: res.data });
     dispatch(loadUser());
   } catch (err) {
@@ -71,13 +65,11 @@ export const login = (email, password) => async (dispatch) => {
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger', 3000)));
     }
-    storage.removeItem('token');
     dispatch({ type: LOGIN_FAIL });
   }
 };
 
 export const logout = () => async (dispatch) => {
-  storage.removeItem('token');
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
 };
@@ -85,7 +77,7 @@ export const logout = () => async (dispatch) => {
 // delete profile
 export const deleteAccount = () => async (dispatch) => {
   // no parameter as the backend will know the ID from the token in the header
-  if (!window.confirm('Are you sure? Thios can not be undone!')) {
+  if (!window.confirm('Are you sure? This can not be undone!')) {
     return;
   }
   try {
@@ -93,7 +85,6 @@ export const deleteAccount = () => async (dispatch) => {
     dispatch({ type: CLEAR_PROFILE });
     dispatch({ type: ACCOUNT_DELETED });
     dispatch(setAlert('Account deleted'));
-    storage.removeItem('token');
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
