@@ -5,6 +5,7 @@ import Spinner from '../layout/Spinner';
 import { getPosts } from '../../actions/post';
 import { Link } from 'react-router-dom';
 import PostItem from './PostItem';
+import PostForm from './PostForm';
 
 const Posts = ({ getPosts, post: { posts, loading } }) => {
   useEffect(() => {
@@ -19,22 +20,8 @@ const Posts = ({ getPosts, post: { posts, loading } }) => {
       <p className="lead">
         <i className="fas fa-user"></i>Welcome to the community
       </p>
+      <PostForm />
 
-      <div className="post-form">
-        <div className="post-form-header bg-primary">
-          <h3>Say something...</h3>
-        </div>
-        <form action="" className="form my-1">
-          <textarea
-            name="post"
-            id=""
-            cols="30"
-            rows="5"
-            placeholder="Create a post"
-          ></textarea>
-          <input type="submit" value="Submit" className="btn btn-dark my-1" />
-        </form>
-      </div>
       <div className="posts">
         {posts.map((post) => (
           <PostItem post={post} key={post._id} />
