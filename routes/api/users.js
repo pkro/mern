@@ -4,7 +4,7 @@ const router = express.Router();
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../../models/user');
+const User = require('../../models/User');
 const config = require('config');
 
 // @route   POST api/users
@@ -13,9 +13,7 @@ const config = require('config');
 router.post(
   '/',
   [
-    check('name', 'Name required')
-      .not()
-      .isEmpty(),
+    check('name', 'Name required').not().isEmpty(),
     check('email', 'Email missing or wrong format').isEmail(),
     check(
       'password',
