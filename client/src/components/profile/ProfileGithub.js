@@ -21,7 +21,7 @@ const ProfileGithub = ({ getGithubRepos, username, repos }) => {
                 <a
                   href={repo.html_url}
                   target="_blank"
-                  rel="no-opener noreferrer"
+                  rel="noopener noreferrer"
                 >
                   {repo.name}
                 </a>
