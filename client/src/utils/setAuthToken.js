@@ -4,12 +4,12 @@ import getStorageProvider from './getStorageProvider';
 const storage = getStorageProvider();
 
 const setAuthToken = (token) => {
-  if (storage.getItem('token')) {
+  if (token) {
     axios.defaults.headers.common['x-auth-token'] = token;
-    localStorage.setItem('token', token);
+    storage.setItem('token', token);
   } else {
     delete axios.defaults.headers.common['x-auth-token'];
-    localStorage.removeItem('token');
+    storage.removeItem('token');
   }
 };
 
