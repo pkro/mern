@@ -9,12 +9,14 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
-
+import getStorageProvider from './utils/getStorageProvider';
 import './App.css';
 
+const storage = getStorageProvider();
+
+setAuthToken(storage.token);
 const App = () => {
   useEffect(() => {
-    setAuthToken(localStorage.token);
     store.dispatch(loadUser());
   }, []);
 
