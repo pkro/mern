@@ -1,7 +1,0 @@
-{
-  "mongoURI": "goddammit",
-  "jwtSecret": "had to reset",
-  "githubClientId": "all",
-  "githubClientSecret": "these",
-  "deletePostsOnAccountDelete": "again""
-}
