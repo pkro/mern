@@ -1,7 +1,7 @@
 {
-  "mongoURI": "mongodb+srv://pkro:2Boit1L3oXF7sxKa@merncourse-vx56e.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "ougdfghdpogh3qenf03z5horengfhfgio",
-  "githubClientId": "deefee4b142d84e3e081",
-  "githubClientSecret": "465d85dcdb485b25e9b4f3c79c93cf1abc39f6c8",
-  "deletePostsOnAccountDelete": false
+  "mongoURI": "goddammit",
+  "jwtSecret": "had to reset",
+  "githubClientId": "all",
+  "githubClientSecret": "these",
+  "deletePostsOnAccountDelete": "again""
 }
